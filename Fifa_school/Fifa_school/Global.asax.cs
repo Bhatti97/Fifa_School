@@ -12,7 +12,7 @@ namespace Fifa_school
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);//coment by Fahad
         }
     }
 }
