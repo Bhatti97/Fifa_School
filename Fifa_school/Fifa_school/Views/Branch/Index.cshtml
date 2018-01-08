@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Fifa_school.Models.Branch>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Branch Data</h2>
+@Html.ActionLink("Create a new Branch","Create")
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Conatact
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Branch_name</td>
+                <td>@item.Branch_Address</td>
+                <td>@item.Branch_Contact</td>
+                <td>
+                @Html.ActionLink("Edit","Edit",new { id = item.Branch_id })|
+                @Html.ActionLink("Delete", "Delete", new { id = item.Branch_id })
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
+
