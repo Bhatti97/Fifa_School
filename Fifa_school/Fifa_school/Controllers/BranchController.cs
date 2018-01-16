@@ -1,4 +1,5 @@
-﻿using Fifa_school.Models;
+﻿using Fifa_school.ManagingUsers;
+using Fifa_school.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -12,42 +13,94 @@ namespace Fifa_school.Controllers
     public class BranchController : Controller
     {
         ApplicationDbcontext db = new ApplicationDbcontext();
+        UserCredentials credentials = new UserCredentials();
         // GET: Branch
         public ActionResult Index()
         {
-            var branch=db.Branch.ToList();
-            return View(branch);
+            try
+            {
+                int userStatus = credentials.IsUserLoginwithRole("Admin", (Users)Session["User"]);
+                if (userStatus==1)
+                {
+                    var branch = db.Branch.ToList();
+                    return View(branch);
+                }
+                else if (userStatus == 2)
+                {
+                    return HttpNotFound();
+                }
+
+            }
+            catch (Exception)
+            {
+                
+            }            
+            return RedirectToAction("Login", "Users", null);
         }
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                int userStatus = credentials.IsUserLoginwithRole("Admin", (Users)Session["User"]);
+                if (userStatus == 1)
+                {
+                    return View();
+                }
+                else if (userStatus == 2)
+                {
+                    return HttpNotFound();
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+            return RedirectToAction("Login", "Users", null);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Branch branch_obj)
         {
-            db.Branch.Add(branch_obj);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+           
+                db.Branch.Add(branch_obj);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+           
         }
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            else
-            {
-                var branch = db.Branch.Find(id);
-                if (branch == null)
+                int userStatus = credentials.IsUserLoginwithRole("Admin", (Users)Session["User"]);
+                if (userStatus == 1)
+                {
+                    if (id == null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    }
+                    else
+                    {
+                        var branch = db.Branch.Find(id);
+                        if (branch == null)
+                        {
+                            return HttpNotFound();
+                        }
+                        else
+                        {
+                            return View(branch);
+                        }
+                    }
+                }
+                else if (userStatus == 2)
                 {
                     return HttpNotFound();
                 }
-                else
-                {
-                    return View(branch);
-                }
             }
+            catch (Exception)
+            {
+
+            }
+            return RedirectToAction("Login", "Users", null);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,24 +112,40 @@ namespace Fifa_school.Controllers
         }
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            else
-            {
-                var branch = db.Branch.Find(id);
-                if (branch == null)
+                int userStatus = credentials.IsUserLoginwithRole("Admin", (Users)Session["User"]);
+                if (userStatus == 1)
+                {
+                    if (id == null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    }
+                    else
+                    {
+                        var branch = db.Branch.Find(id);
+                        if (branch == null)
+                        {
+                            return HttpNotFound();
+                        }
+                        else
+                        {
+                            db.Entry(branch).State = EntityState.Deleted;
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                    }
+                }
+                else if (userStatus == 2)
                 {
                     return HttpNotFound();
                 }
-                else
-                {
-                    db.Entry(branch).State = EntityState.Deleted;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
+            }            
+            catch (Exception)
+            {
+
             }
-        }
+            return RedirectToAction("Login", "Users", null);
+    }
     }
 }

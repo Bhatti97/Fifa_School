@@ -14,5 +14,6 @@ namespace Fifa_school.Models
         }
         public DbSet<Branch> Branch { get; set; }
         public DbSet<Teacher> Teacher { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }

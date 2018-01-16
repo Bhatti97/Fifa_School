@@ -7,18 +7,56 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Fifa_school.Models;
+using Fifa_school.ManagingUsers;
 
 namespace Fifa_school.Controllers
 {
     public class TeachersController : Controller
     {
         private ApplicationDbcontext db = new ApplicationDbcontext();
-
+        UserCredentials credentials = new UserCredentials();
         // GET: Teachers
         public ActionResult Index()
         {
-            var teacher = db.Teacher.Include(t => t.Branch);
-            return View(teacher.ToList());
+
+            int userStatus = 0;
+            try
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (i == 0)
+                    {
+                        userStatus = credentials.IsUserLoginwithRole("Admin", (Users)Session["User"]);      //Check for Admin
+                    }
+                    else
+                    {
+                        userStatus = credentials.IsUserLoginwithRole("Teacher", (Users)Session["User"]);        //Check for Teacher
+                    }
+
+                    if (userStatus == 1)                                    //Role Matched
+                    {
+                        //ViewBag.index = "our first View Bag";
+                        Session["index"] = "our first Session";
+                        var teacher = db.Teacher.Include(t => t.Branch);
+                        return View(teacher.ToList());
+                    }                 
+                      
+                    
+                }
+                if (userStatus == 0)            //RoleNot Matched
+                {
+                    return RedirectToAction("Login", "Users", null);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound();
+            }
         }
 
         // GET: Teachers/Details/5
@@ -39,8 +77,22 @@ namespace Fifa_school.Controllers
         // GET: Teachers/Create
         public ActionResult Create()
         {
-            ViewBag.Branch_id = new SelectList(db.Branch, "Branch_id", "Branch_name");
-            return View();
+            string[] roles = new string[2];
+            roles[0] = "Admin";
+            roles[1] = "Teacher";
+            int userstatus = credentials.IsUserLoginwithMultipleRole(roles, (Users)Session["User"]);
+            if (userstatus == 1)
+            {
+                Session["index"] = null;
+                var getSession = Session["index"];
+                ViewBag.Branch_id = new SelectList(db.Branch, "Branch_id", "Branch_name");
+                return View();
+            }
+            else 
+            {
+                return RedirectToAction("Login", "Users", null);
+            }
+          
         }
 
         // POST: Teachers/Create

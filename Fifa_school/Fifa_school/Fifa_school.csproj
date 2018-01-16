@@ -127,9 +127,11 @@
     <Compile Include="Controllers\BranchController.cs" />
     <Compile Include="Controllers\Branches_MVC_Controller.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ManagingUsers\UserCredentials.cs" />
     <Compile Include="Migrations\201801072305487_mig.cs" />
     <Compile Include="Migrations\201801072305487_mig.Designer.cs">
       <DependentUpon>201801072305487_mig.cs</DependentUpon>
@@ -138,10 +140,15 @@
     <Compile Include="Migrations\201801080023219_due to add Teacher Entity.Designer.cs">
       <DependentUpon>201801080023219_due to add Teacher Entity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801162105342_user Module Migration.cs" />
+    <Compile Include="Migrations\201801162105342_user Module Migration.Designer.cs">
+      <DependentUpon>201801162105342_user Module Migration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbcontext.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\Users.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +161,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Users\Register.cshtml" />
+    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -170,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801080023219_due to add Teacher Entity.resx">
       <DependentUpon>201801080023219_due to add Teacher Entity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801162105342_user Module Migration.resx">
+      <DependentUpon>201801162105342_user Module Migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
